@@ -16,6 +16,7 @@ public class Main {
     static
     {
         Repositories = new HashMap<String, String>();
+        Repositories.put("REPO_DZN_DYNAI", "https://github.com/10Dozen/dzn_dynai/archive/master.zip");
         Repositories.put("dzn_dynai", "https://github.com/10Dozen/dzn_dynai/archive/master.zip");
         Repositories.put("dzn_gear", "https://github.com/10Dozen/dzn_gear/archive/master.zip");
         Repositories.put("dzn_civen", "https://github.com/10Dozen/dzn_civen/archive/master.zip");
@@ -36,6 +37,9 @@ public class Main {
         boolean needTSF = GetBoolProperty(prop, "INSTALL_DZN_TSF");
         String outputFolderPath = prop.getProperty("INSTALLATION_FOLDER");
 
+        String DynaiRepoLink = GetStringProperty(prop, "REPO_DZN_DYNAI");
+
+/*
         System.out.println(" ------ tSF Installer ------ ");
         System.out.println(" Output folder: ".concat(outputFolderPath));
         System.out.println(" Install: "
@@ -59,10 +63,20 @@ public class Main {
 
         System.out.println(" --------------------------- ");
         System.out.println(" All done! Have a nice day!");
+*/
     }
 
     public static boolean GetBoolProperty (Properties prop, String param) {
         return (Integer.parseInt( prop.getProperty(param) ) > 0);
+    }
+
+    public static String GetStringProperty (Properties prop, String param) {
+        String val = prop.getProperty(param);
+        if (val.length() == 0) {
+            val = Repositories.get(param);
+        }
+
+        return val;
     }
 
     public static void ProcessRepository(boolean isNeeded, String name, File outputFolder) throws IOException {
