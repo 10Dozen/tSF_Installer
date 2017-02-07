@@ -1,4 +1,4 @@
-package com.ts;
+ package com.ts;
 
 import java.io.*;
 import java.net.URL;
@@ -37,6 +37,12 @@ public class Main {
 
         System.out.println(" ------ tSF Installer ------ ");
         System.out.println(" Output folder: ".concat(outputFolderPath));
+        File outputFolder = new File(outputFolderPath);
+        if (!outputFolder.exists()) {
+            System.out.println("Aborted! No INSTALLATION_FOLDER exists!");
+            System.exit(0);
+        }
+
         System.out.println(" Install: "
                 .concat("[ Gear - ".concat(Boolean.toString(needGear))).concat(" ]")
                 .concat("[ DynAI - ".concat(Boolean.toString(needDynai))).concat(" ]")
@@ -44,12 +50,6 @@ public class Main {
                 .concat("[ tSF - ".concat(Boolean.toString(needTSF))).concat(" ]")
         );
         System.out.println(" --------------------------- ");
-
-        File outputFolder = new File(outputFolderPath);
-        if (!outputFolder.exists()) {
-            System.out.println("Aborted! No INSTALLATION_FOLDER exists!");
-            System.exit(0);
-        }
 
         ProcessRepository("dzn_DynAI", needDynai, GetStringProperty(prop, "REPO_DZN_DYNAI"), outputFolder);
         ProcessRepository("dzn_Gear", needGear, GetStringProperty(prop, "REPO_DZN_GEAR"), outputFolder);
@@ -84,7 +84,6 @@ public class Main {
 
     public static void ProcessRepository(String name, boolean isNeeded, String url, File outputFolder) throws IOException {
         if (!isNeeded) { return; }
-
         System.out.println("Installing ".concat(name));
 
         System.out.print("    Downloading: ");
@@ -108,6 +107,9 @@ public class Main {
         fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 
         String folder = ExtractZipContents.UnzipFile(filename);
+
+        rbc.close();
+        fos.close();
 
         return folder;
     }
@@ -184,6 +186,8 @@ public class Main {
 
         if (addTSF) {
             lines.add("");
+            lines.add("  // TS Framework");
+            lines.add("[] execVM \"dzn_tSFramework\\dzn_tSFramework_Init.sqf\";");
             lines.add("  // dzn AAR");
             lines.add("[] execVM \"dzn_brv\\dzn_brv_init.sqf\";");
         }
