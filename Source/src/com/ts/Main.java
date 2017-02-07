@@ -1,4 +1,4 @@
-package com.ts;
+ package com.ts;
 
 import java.io.*;
 import java.net.URL;
@@ -16,12 +16,11 @@ public class Main {
     static
     {
         Repositories = new HashMap<String, String>();
-        Repositories.put("dzn_dynai", "https://github.com/10Dozen/dzn_dynai/archive/master.zip");
-        Repositories.put("dzn_gear", "https://github.com/10Dozen/dzn_gear/archive/master.zip");
-        Repositories.put("dzn_civen", "https://github.com/10Dozen/dzn_civen/archive/master.zip");
-        Repositories.put("dzn_tsf", "https://github.com/10Dozen/dzn_tSFramework/archive/master.zip");
+        Repositories.put("REPO_DZN_DYNAI", "https://github.com/10Dozen/dzn_dynai/archive/master.zip");
+        Repositories.put("REPO_DZN_GEAR", "https://github.com/10Dozen/dzn_gear/archive/master.zip");
+        Repositories.put("REPO_DZN_CIVEN", "https://github.com/10Dozen/dzn_civen/archive/master.zip");
+        Repositories.put("REPO_DZN_TSF", "https://github.com/10Dozen/dzn_tSFramework/archive/master.zip");
     }
-
 
     public static void main(String[] args) throws IOException {
 
@@ -38,24 +37,27 @@ public class Main {
 
         System.out.println(" ------ tSF Installer ------ ");
         System.out.println(" Output folder: ".concat(outputFolderPath));
+        File outputFolder = new File(outputFolderPath);
+        if (!outputFolder.exists()) {
+            System.out.println("Aborted! No INSTALLATION_FOLDER exists!");
+            System.exit(0);
+        }
+
         System.out.println(" Install: "
                 .concat("[ Gear - ".concat(Boolean.toString(needGear))).concat(" ]")
                 .concat("[ DynAI - ".concat(Boolean.toString(needDynai))).concat(" ]")
                 .concat("[ CivEn - ".concat(Boolean.toString(needCiven))).concat(" ]")
                 .concat("[ tSF - ".concat(Boolean.toString(needTSF))).concat(" ]")
         );
-
         System.out.println(" --------------------------- ");
 
-        File outputFolder = new File(outputFolderPath);
-
-        ProcessRepository(needDynai, "dzn_dynai", outputFolder);
-        ProcessRepository(needGear, "dzn_gear", outputFolder);
-        ProcessRepository(needCiven, "dzn_civen", outputFolder);
-        ProcessRepository(needTSF, "dzn_tsf", outputFolder);
+        ProcessRepository("dzn_DynAI", needDynai, GetStringProperty(prop, "REPO_DZN_DYNAI"), outputFolder);
+        ProcessRepository("dzn_Gear", needGear, GetStringProperty(prop, "REPO_DZN_GEAR"), outputFolder);
+        ProcessRepository("dzn_CivEn", needCiven, GetStringProperty(prop, "REPO_DZN_CIVEN"), outputFolder);
+        ProcessRepository("dzn_tSF", needTSF, GetStringProperty(prop, "REPO_DZN_TSF"), outputFolder);
 
         System.out.println("Compiling init.sqf");
-        GenerateInitSQF(outputFolderPath, needGear,needDynai,needCiven,needTSF);
+        GenerateInitSQF(outputFolderPath, needGear, needDynai, needCiven, needTSF);
 
         System.out.println(" --------------------------- ");
         System.out.println(" All done! Have a nice day!");
@@ -65,32 +67,49 @@ public class Main {
         return (Integer.parseInt( prop.getProperty(param) ) > 0);
     }
 
-    public static void ProcessRepository(boolean isNeeded, String name, File outputFolder) throws IOException {
-        if (!isNeeded) { return; }
+    public static String GetStringProperty (Properties prop, String param) {
+        String val = prop.getProperty(param);
+        if (val.length() == 0) {
+            val = Repositories.get(param);
+        }
 
+        return val;
+    }
+
+    public static String GetRepoFileName(String src) {
+        String[] segments = src.split("/");
+
+        return (segments[segments.length-1]);
+    }
+
+    public static void ProcessRepository(String name, boolean isNeeded, String url, File outputFolder) throws IOException {
+        if (!isNeeded) { return; }
         System.out.println("Installing ".concat(name));
 
         System.out.print("    Downloading: ");
-        String url = Repositories.get(name);
         File folder = new File( DownloadRepository(url) );
         System.out.println(" >> Done");
 
         System.out.print("    Installing: ");
         CopyFolder(folder, outputFolder);
         DeleteFolder(folder);
-        DeleteFolder(new File ("master.zip"));
+        DeleteFolder(new File (GetRepoFileName(url)));
         System.out.println(" >> Done");
     }
 
     public static String DownloadRepository(String src) throws IOException {
         URL website = new URL(src);
 
+        String filename = GetRepoFileName(src);
+
         ReadableByteChannel rbc = Channels.newChannel(website.openStream());
-        FileOutputStream fos = new FileOutputStream("master.zip");
+        FileOutputStream fos = new FileOutputStream(filename);
         fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 
-        String folder = ExtractZipContents.UnzipFile("master.zip");
-        // System.out.println(folder);
+        String folder = ExtractZipContents.UnzipFile(filename);
+
+        rbc.close();
+        fos.close();
 
         return folder;
     }
@@ -167,6 +186,8 @@ public class Main {
 
         if (addTSF) {
             lines.add("");
+            lines.add("  // TS Framework");
+            lines.add("[] execVM \"dzn_tSFramework\\dzn_tSFramework_Init.sqf\";");
             lines.add("  // dzn AAR");
             lines.add("[] execVM \"dzn_brv\\dzn_brv_init.sqf\";");
         }
