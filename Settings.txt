@@ -1,12 +1,36 @@
+// Path to mission folder (Note: always use \\ instead of \)
+
 INSTALLATION_FOLDER=E:\\Workstation\\GitHub\\tSFramework_Installer\\MyMission
+
+
+// Installation options
+//		Mark components you want to install with =1
+//		Components with =0 will not be installed.
 
 INSTALL_DZN_DYNAI=1
 INSTALL_DZN_GEAR=1
+INSTALL_DZN_CommonFunctions=1
 INSTALL_DZN_CIVEN=0
 INSTALL_DZN_TSF=1
 
-// If empty - Master branch is used
+
+// Kits (up to 9)
+//		Links to kit files (RawLink at Gear_Kits_Collection repo) you want to install
+//		If Empty - no kits will be download
+
+KIT_1=
+KIT_2=
+KIT_3=
+KIT_4=
+KIT_5=
+
+
+// Repositories
+// 		Links to specific repository file (.zip)
+// 		If empty - Master is used
+
 REPO_DZN_DYNAI=
+REPO_DZN_CommonFunctions=
 REPO_DZN_GEAR=
 REPO_DZN_CIVEN=
 REPO_DZN_TSF=
