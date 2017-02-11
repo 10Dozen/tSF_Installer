@@ -1,12 +1,36 @@
-INSTALLATION_FOLDER=D:\\Workstation\\GitHub\\tSF_Installer\\MyMission
+// Path to mission folder (Note: always use \\ instead of \)
+
+INSTALLATION_FOLDER=E:\\Workstation\\GitHub\\tSFramework_Installer\\MyMission
+
+
+// Installation options
+//		Mark components you want to install with =1
+//		Components with =0 will not be installed.
 
 INSTALL_DZN_DYNAI=1
 INSTALL_DZN_GEAR=1
+INSTALL_DZN_CommonFunctions=1
 INSTALL_DZN_CIVEN=0
 INSTALL_DZN_TSF=1
 
-// If empty - Master is used
+
+// Kits
+//		Links to kit files (RawLink at Gear_Kits_Collection repo) you want to install
+//		If Empty - no kits will be download
+
+KIT_1=https://raw.githubusercontent.com/reptiloids/Gear_Kits_Collection/master/West/US%20SF%20Ghost%20Recon%201-4-4/Kits%20US%20SF%20Ghost%20Recon%201-4-4.sqf
+KIT_2=
+KIT_3=
+KIT_4=
+KIT_5=
+
+
+// Repositories
+// 		Links to specific repository file (.zip)
+// 		If empty - Master is used
+
 REPO_DZN_DYNAI=https://github.com/10Dozen/dzn_dynai/archive/ZeusCompatibility-Patch1.zip
+REPO_DZN_CommonFunctions=https://github.com/10Dozen/dzn_commonFunctions/archive/checkers-0.9.zip
 REPO_DZN_GEAR=
 REPO_DZN_CIVEN=
 REPO_DZN_TSF=
