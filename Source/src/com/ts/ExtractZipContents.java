@@ -18,17 +18,11 @@ public class ExtractZipContents {
 			ZipFile zipFile = new ZipFile(filename);
 			Enumeration<?> enu = zipFile.entries();
 			while (enu.hasMoreElements()) {
-				System.out.print("|");
+				// System.out.print("|");
 
 				ZipEntry zipEntry = (ZipEntry) enu.nextElement();
 
 				String name = zipEntry.getName();
-				long size = zipEntry.getSize();
-				long compressedSize = zipEntry.getCompressedSize();
-				/*
-				System.out.printf("name: %-20s | size: %6d | compressed size: %6d\n",
-						name, size, compressedSize);
-				 */
 
 				// Do we need to create a directory ?
 				File file = new File(name);
