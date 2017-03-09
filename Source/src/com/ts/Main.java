@@ -180,6 +180,7 @@ public class Main {
         List<String> lines = new ArrayList<String>();
 
         lines.add("// *****");
+        lines.add("tS_DEBUG = true;");
 
         if (g) {
             lines.add("");
