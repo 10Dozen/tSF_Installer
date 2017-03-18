@@ -1,4 +1,4 @@
- package com.ts;
+package com.ts;
 
 import java.io.*;
 import java.net.URL;
@@ -15,8 +15,23 @@ import java.util.*;
 
 public class Main {
     private static final Map<String, String> Repositories;
-    static
-    {
+    private static final String[] FilesToBackup = {
+            "Settings.sqf"
+            , "tSF_briefing.sqf"
+            , "Endings.hpp"
+            , "Notes.sqf"
+            , "NotesSettings.sqf"
+            , "description.ext"
+            , "initServer.sqf"
+            , "init.sqf"
+            , "overview.jpg"
+
+            , "Zones.sqf"
+            , "GearAssignementTable.sqf"
+            , "Kits.sqf"
+    };
+
+    static {
         Repositories = new HashMap<String, String>();
         Repositories.put("REPO_DZN_DYNAI", "https://github.com/10Dozen/dzn_dynai/archive/master.zip");
         Repositories.put("REPO_DZN_GEAR", "https://github.com/10Dozen/dzn_gear/archive/master.zip");
@@ -24,6 +39,7 @@ public class Main {
         Repositories.put("REPO_DZN_CIVEN", "https://github.com/10Dozen/dzn_civen/archive/master.zip");
         Repositories.put("REPO_DZN_TSF", "https://github.com/10Dozen/dzn_tSFramework/archive/master.zip");
     }
+
 
     public static void main(String[] args) throws IOException {
 
@@ -38,6 +54,7 @@ public class Main {
         boolean needCiven = GetBoolProperty(prop, "INSTALL_DZN_CIVEN");
         boolean needTSF = GetBoolProperty(prop, "INSTALL_DZN_TSF");
         String outputFolderPath = prop.getProperty("INSTALLATION_FOLDER");
+        boolean backupNeeded = GetBoolProperty(prop,"MAKE_BACKUP");
 
         System.out.println(" ------ tSF Installer ------ ");
         System.out.println(" Output folder: ".concat(outputFolderPath));
@@ -46,14 +63,15 @@ public class Main {
             System.out.println("Aborted! No INSTALLATION_FOLDER exists!");
             System.exit(0);
         }
+        File tempFolder = new File("Temp");
 
         PrintInstallationList(needGear, needDynai, needCommonFunctions, needCiven, needTSF);
 
-        ProcessRepository("dzn_DynAI", needDynai, GetStringProperty(prop, "REPO_DZN_DYNAI"), outputFolder);
-        ProcessRepository("dzn_Gear", needGear, GetStringProperty(prop, "REPO_DZN_GEAR"), outputFolder);
-        ProcessRepository("dzn_CommonFunctions", needCommonFunctions, GetStringProperty(prop, "REPO_DZN_CommonFunctions"), outputFolder);
-        ProcessRepository("dzn_CivEn", needCiven, GetStringProperty(prop, "REPO_DZN_CIVEN"), outputFolder);
-        ProcessRepository("dzn_tSF", needTSF, GetStringProperty(prop, "REPO_DZN_TSF"), outputFolder);
+        ProcessRepository("dzn_DynAI", needDynai, GetStringProperty(prop, "REPO_DZN_DYNAI"));
+        ProcessRepository("dzn_Gear", needGear, GetStringProperty(prop, "REPO_DZN_GEAR"));
+        ProcessRepository("dzn_CommonFunctions", needCommonFunctions, GetStringProperty(prop, "REPO_DZN_CommonFunctions"));
+        ProcessRepository("dzn_CivEn", needCiven, GetStringProperty(prop, "REPO_DZN_CIVEN"));
+        ProcessRepository("dzn_tSF", needTSF, GetStringProperty(prop, "REPO_DZN_TSF"));
 
         System.out.println("Compiling init.sqf");
         GenerateInitSQF(outputFolderPath, needGear, needDynai, needCiven, needTSF);
@@ -61,6 +79,11 @@ public class Main {
         System.out.println("\n --------------------------- \n dzn_gear Kits:");
         ProcessKits(prop, needGear, outputFolderPath);
 
+        System.out.println(" --------------------------- ");
+        System.out.println(" Installation... ");
+        UpdateFiles(tempFolder, outputFolder, backupNeeded);
+
+        System.out.println(" Done! ");
         System.out.println(" --------------------------- ");
         System.out.println(" All done! Have a nice day!");
     }
@@ -94,7 +117,7 @@ public class Main {
         System.out.println(" --------------------------- ");
     }
 
-    public static void ProcessRepository(String name, boolean isNeeded, String url, File outputFolder) throws IOException {
+    public static void ProcessRepository(String name, boolean isNeeded, String url) throws IOException {
         if (!isNeeded) { return; }
         System.out.println("Installing ".concat(name));
 
@@ -102,8 +125,8 @@ public class Main {
         File folder = new File( DownloadRepository(url,false) );
         System.out.println(" Done!");
 
-        System.out.print("    Installing... ");
-        CopyFolder(folder, outputFolder);
+        System.out.print("    Unziping... ");
+        CopyFolder(folder, new File("Temp"));
         DeleteFolder(folder);
         DeleteFolder(new File (GetRepoFileName(url)));
         System.out.println("  Done!");
@@ -119,7 +142,7 @@ public class Main {
 
         String out;
         if (isSingleFile) {
-           out = filename;
+            out = filename;
         } else {
             out = ExtractZipContents.UnzipFile(filename);
         }
@@ -180,7 +203,7 @@ public class Main {
         List<String> lines = new ArrayList<String>();
 
         lines.add("// *****");
-        lines.add("tS_DEBUG = true;");
+        lines.add("tSF_DEBUG = true;");
 
         if (g) {
             lines.add("");
@@ -249,4 +272,42 @@ public class Main {
         }
     }
 
+    public static void UpdateFiles(File tempFolder, File outputFolder, boolean backupNeeded) throws IOException {
+        if ( backupNeeded ) {
+            BackupFolder(tempFolder, outputFolder);
+        }
+
+        CopyFolder(tempFolder, outputFolder);
+        DeleteFolder(tempFolder);
+    }
+
+    public static void BackupFolder(File src, File dest) throws IOException {
+        if (src.isDirectory()) {
+            String files[] = src.list();
+            //System.out.println("Backup (folder): Checking  " + src);
+            for (String file : files) {
+                BackupFolder(new File(src, file), new File(dest, file));
+            }
+        } else {
+            if ( !(Arrays.asList(FilesToBackup).contains(src.getName())) ) {
+                //System.out.println("Backup (file): File is not for backup - " + src.getName());
+                return;
+            }
+
+            if ( !(dest.exists()) ) {
+                //System.out.println("Backup (file): Destination file not exists - " + dest);
+                return;
+            }
+
+            if (Arrays.equals(Files.readAllBytes(src.toPath()), Files.readAllBytes(dest.toPath()))) {
+                //System.out.println("Backup (file): Files are the same, No backup (" + dest + ")");
+                return;
+            }
+
+            //System.out.println("Backup (file): Backuping diff files! (" + dest + ")");
+            String name = dest.toString();
+            name = name.substring(0, name.length() - 4).concat(".old.sqf");
+            dest.renameTo(new File(name));
+        }
+    }
 }

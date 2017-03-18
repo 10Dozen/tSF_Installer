@@ -1,7 +1,9 @@
 // Path to mission folder (Note: always use \\ instead of \)
 
-INSTALLATION_FOLDER=E:\\Workstation\\GitHub\\tSFramework_Installer\\MyMission
+INSTALLATION_FOLDER=C:\\Users\\10Dozen\\Documents\\Arma 3 - Other Profiles\\10Dozen\\mpmissions\\CO31-Operation-Sunrise.Zargabad2
 
+// Back up files in Installation Folder (1 - yes, 0 - no)
+MAKE_BACKUP=1
 
 // Installation options
 //		Mark components you want to install with =1
@@ -18,7 +20,7 @@ INSTALL_DZN_TSF=1
 //		Links to kit files (RawLink at Gear_Kits_Collection repo) you want to install
 //		If Empty - no kits will be download
 
-KIT_1=https://raw.githubusercontent.com/reptiloids/Gear_Kits_Collection/master/West/US%20SF%20Ghost%20Recon%201-4-4/Kits%20US%20SF%20Ghost%20Recon%201-4-4.sqf
+KIT_1=
 KIT_2=
 KIT_3=
 KIT_4=
@@ -29,8 +31,8 @@ KIT_5=
 // 		Links to specific repository file (.zip)
 // 		If empty - Master is used
 
-REPO_DZN_DYNAI=https://github.com/10Dozen/dzn_dynai/archive/ZeusCompatibility-Patch1.zip
-REPO_DZN_CommonFunctions=https://github.com/10Dozen/dzn_commonFunctions/archive/checkers-0.9.zip
+REPO_DZN_DYNAI=
+REPO_DZN_CommonFunctions=
 REPO_DZN_GEAR=
 REPO_DZN_CIVEN=
 REPO_DZN_TSF=

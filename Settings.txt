@@ -1,7 +1,9 @@
 // Path to mission folder (Note: always use \\ instead of \)
 
-INSTALLATION_FOLDER=E:\\Workstation\\GitHub\\tSFramework_Installer\\MyMission
+INSTALLATION_FOLDER=C:\\Users\\10Dozen\\Documents\\Arma 3 - Other Profiles\\10Dozen\\mpmissions\\CO31-Operation-Sunrise.Zargabad2
 
+// Back up files in Installation Folder (1 - yes, 0 - no)
+MAKE_BACKUP=1
 
 // Installation options
 //		Mark components you want to install with =1
@@ -14,7 +16,7 @@ INSTALL_DZN_CIVEN=0
 INSTALL_DZN_TSF=1
 
 
-// Kits (up to 9)
+// Kits
 //		Links to kit files (RawLink at Gear_Kits_Collection repo) you want to install
 //		If Empty - no kits will be download
 
