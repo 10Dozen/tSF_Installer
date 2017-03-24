@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class Main {
     private static final Map<String, String> Repositories;
@@ -305,9 +306,11 @@ public class Main {
             }
 
             //System.out.println("Backup (file): Backuping diff files! (" + dest + ")");
+
             String name = dest.toString();
-            name = name.substring(0, name.length() - 4).concat(".old.sqf");
-            dest.renameTo(new File(name));
+            String[] exts = name.split(Pattern.quote("."));
+            exts[exts.length - 1] = "old.".concat(exts[exts.length - 1]);
+            dest.renameTo(new File( String.join(".", exts) ));
         }
     }
 }
