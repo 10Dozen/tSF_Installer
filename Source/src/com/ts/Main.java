@@ -75,10 +75,10 @@ public class Main {
         ProcessRepository("dzn_tSF", needTSF, GetStringProperty(prop, "REPO_DZN_TSF"));
 
         System.out.println("Compiling init.sqf");
-        GenerateInitSQF(outputFolderPath, needGear, needDynai, needCiven, needTSF);
+        GenerateInitSQF("Temp", needGear, needDynai, needCiven, needTSF);
 
         System.out.println("\n --------------------------- \n dzn_gear Kits:");
-        ProcessKits(prop, needGear, outputFolderPath);
+        ProcessKits(prop, needGear,"Temp");
 
         System.out.println(" --------------------------- ");
         System.out.println(" Installation... ");
@@ -205,7 +205,7 @@ public class Main {
 
         lines.add("//	Tacitcal Shift Framework initialization");
         lines.add("[] spawn {");
-        lines.add("        waitUntil { !isNil "MissionDate" };");
+        lines.add("        waitUntil { !isNil \"MissionDate\" };");
 
         if (g) {            
             lines.add("");
@@ -264,7 +264,7 @@ public class Main {
 
                     Files.write(
                             kitsSummary.toPath()
-                            , "\n#include \"Kits US SF Ghost Recon 1-4-4.sqf\"".getBytes()
+                            , "\n#include \"".concat(kitFile.getName()).concat("\"").getBytes()
                             , StandardOpenOption.APPEND
                     );
                     System.out.println("    Kit file applied to Kits.sqf. Done!");
