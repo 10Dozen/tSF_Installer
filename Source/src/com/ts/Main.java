@@ -203,37 +203,37 @@ public class Main {
     ) throws IOException {
         List<String> lines = new ArrayList<String>();
 
-        lines.add("// *****");
-        lines.add("tSF_DEBUG = true;");
+        lines.add("//	Tacitcal Shift Framework initialization");
+        lines.add("[] spawn {");
+        lines.add("        waitUntil { !isNil "MissionDate" };");
 
-        if (g) {
+        if (g) {            
             lines.add("");
-            lines.add("// dzn Gear");
-            lines.add("  // set true to engage Edit mode");
-            lines.add("[false] execVM \"dzn_gear\\dzn_gear_init.sqf\";");
+            lines.add("        // dzn Gear 	(set true to engage Edit mode)");
+            lines.add("        [false] execVM \"dzn_gear\\dzn_gear_init.sqf\";");
         }
 
         if (d) {
             lines.add("");
-            lines.add("// dzn DynAI");
-            lines.add("[] execVM \"dzn_dynai\\dzn_dynai_init.sqf\";");
+            lines.add("        // dzn DynAI");
+            lines.add("        [] execVM \"dzn_dynai\\dzn_dynai_init.sqf\";");
         }
 
         if (c) {
             lines.add("");
-            lines.add("// dzn CivEn");
-            lines.add("[] execVM \"dzn_civen\\dzn_civen_init.sqf\";");
+            lines.add("        // dzn CivEn");
+            lines.add("        [] execVM \"dzn_civen\\dzn_civen_init.sqf\";");
         }
 
         if (t) {
             lines.add("");
-            lines.add("  // TS Framework");
-            lines.add("[] execVM \"dzn_tSFramework\\dzn_tSFramework_Init.sqf\";");
-            lines.add("  // dzn AAR");
-            lines.add("[] execVM \"dzn_brv\\dzn_brv_init.sqf\";");
-        }
+            lines.add("        // TS Framework");
+            lines.add("        [] execVM \"dzn_tSFramework\\dzn_tSFramework_Init.sqf\";");
+            lines.add("        // dzn AAR");
+            lines.add("        [] execVM \"dzn_brv\\dzn_brv_init.sqf\";");
+        }     
 
-        lines.add("");
+        lines.add("};");
         lines.add("// *****");
 
         Path file = Paths.get(folder.concat("//init.sqf"));
