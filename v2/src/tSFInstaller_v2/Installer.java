@@ -36,11 +36,11 @@ public class Installer {
 
     static {
         Repositories = new HashMap<String, String>();
-        Repositories.put("REPO_DZN_DYNAI", "https://github.com/10Dozen/dzn_dynai/archive/master.zip");
-        Repositories.put("REPO_DZN_GEAR", "https://github.com/10Dozen/dzn_gear/archive/master.zip");
-        Repositories.put("REPO_DZN_CommonFunctions", "https://github.com/10Dozen/dzn_commonFunctions/archive/master.zip");
-        Repositories.put("REPO_DZN_CIVEN", "https://github.com/10Dozen/dzn_civen/archive/master.zip");
-        Repositories.put("REPO_DZN_TSF", "https://github.com/10Dozen/dzn_tSFramework/archive/master.zip");
+        Repositories.put("dzn_DynAI", "https://github.com/10Dozen/dzn_dynai/archive/master.zip");
+        Repositories.put("dzn_Gear", "https://github.com/10Dozen/dzn_gear/archive/master.zip");
+        Repositories.put("dzn_CommonFunctions", "https://github.com/10Dozen/dzn_commonFunctions/archive/master.zip");
+        Repositories.put("dzn_CivEn", "https://github.com/10Dozen/dzn_civen/archive/master.zip");
+        Repositories.put("dzn_tSF", "https://github.com/10Dozen/dzn_tSFramework/archive/master.zip");
     }
 
     public static boolean Install (
@@ -72,19 +72,18 @@ public class Installer {
         if (doTSF) { LogToFile("       - tS Framework"); }
         LogToFile(" --------------------------- ");
 
-        /*
         ProcessRepository("dzn_DynAI", doDA, urlDA);
         ProcessRepository("dzn_Gear", doG, urlG);
         ProcessRepository("dzn_CommonFunctions", doCF, urlCF);
         ProcessRepository("dzn_CivEn", doCN, urlCN);
         ProcessRepository("dzn_tSF", doTSF, urlTSF);
-*/
+
         LogToFile("Compiling init.sqf");
-        // GenerateInitSQF(doG,doDA,doCN,doTSF);
-        LogToFile("\\n --------------------------- \\n dzn_gear Kits:");
-        // ProcessKits(doG, path, kits);
+        GenerateInitSQF(doG,doDA,doCN,doTSF);
+        LogToFile("\n --------------------------- \n dzn_gear Kits:");
+        ProcessKits(doG, path, kits);
         LogToFile(" --------------------------- \n  Installation... ");
-        // UpdateFiles(tempFolder, outputFolder, doBackup);
+        UpdateFiles(tempFolder, outputFolder, doBackup);
         LogToFile(" Done! \n  --------------------------- \n  All done! Have a nice day!");
 
         saveSettings(path, doBackup , doCF, doG, doDA, doCN, doTSF, urlCF, urlG, urlDA, urlCN, urlTSF, kits);
@@ -100,7 +99,10 @@ public class Installer {
         if (!isNeeded) { return; }
         LogToFile("Installing ".concat(name));
 
-        LogToFile("    Downloading... ");
+        if (url.isEmpty()) {
+            url = Repositories.get(name);
+        }
+        LogToFile("    Downloading... ".concat(url));
         File folder = new File( DownloadRepository(url,false) );
         LogToFile("     Done!");
 
