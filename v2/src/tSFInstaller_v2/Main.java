@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -26,7 +27,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        Properties prop = getSettings();
+        Properties prop = Installer.getSettings();
 
         primaryStage.setTitle("tSF Installer (v2.0)");
 
@@ -100,40 +101,53 @@ public class Main extends Application {
         hbBtn.getChildren().add(btn);
         grid.add(hbBtn, 1, 15);
 
+        Label msg = new Label();
+        grid.add(msg, 0, 15,2,1);
+
         btn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-               /* String path
-            , boolean doBackup
-            , boolean doCF, boolean doG, boolean doDA, boolean doCN, boolean doTSF
-            , String urlCF, String urlG, String urlDA, String urlCN, boolean urlTSF
-            , String kit1, String kit2, String kit3*/
+                if (pathField.getText() == "Please select...") {
+                    msg.setText("Installation folder is not selected!");
+                    msg.setTextFill(Color.web("#9b0000"));
+                } else {
 
-                try {
+                    try {
+                        msg.setText("Installation in progress!");
+                        msg.setTextFill(Color.web("#6dad00"));
 
+                        String[] kits = {
+                                InstallURLs.get("Kit #1").getText()
+                                , InstallURLs.get("Kit #2").getText()
+                                , InstallURLs.get("Kit #3").getText()
+                        };
 
-                    Installer.Install(
-                        pathField.getText()
-                        , backupChBox.isSelected()
+                        boolean result = Installer.Install(
+                                pathField.getText()
+                                , backupChBox.isSelected()
 
-                        , InstallNeeded.get("dzn_Common Functions").isSelected()
-                            , InstallNeeded.get("dzn_Gear").isSelected()
-                            , InstallNeeded.get("dzn_DynAI").isSelected()
-                            , InstallNeeded.get("dzn_CivEn").isSelected()
-                            , InstallNeeded.get("dzn_tSFramework").isSelected()
+                                , InstallNeeded.get("dzn_Common Functions").isSelected()
+                                , InstallNeeded.get("dzn_Gear").isSelected()
+                                , InstallNeeded.get("dzn_DynAI").isSelected()
+                                , InstallNeeded.get("dzn_CivEn").isSelected()
+                                , InstallNeeded.get("dzn_tSFramework").isSelected()
 
-                            , InstallURLs.get("dzn_Common Functions").getText()
-                            , InstallURLs.get("dzn_Gear").getText()
-                            , InstallURLs.get("dzn_DynAI").getText()
-                            , InstallURLs.get("dzn_CivEn").getText()
-                            , InstallURLs.get("dzn_tSFramework").getText()
-                        , "", "", ""
-                    );
-                } catch (IOException e) {
-                    e.printStackTrace();
+                                , InstallURLs.get("dzn_Common Functions").getText()
+                                , InstallURLs.get("dzn_Gear").getText()
+                                , InstallURLs.get("dzn_DynAI").getText()
+                                , InstallURLs.get("dzn_CivEn").getText()
+                                , InstallURLs.get("dzn_tSFramework").getText()
+                                , kits
+                        );
+
+                        if (result) {
+                            msg.setText("All done!");
+                            msg.setTextFill(Color.web("#6dad00"));
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-
-                //  /*  pathField.getText()*/
             }
         });
 
@@ -146,34 +160,6 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         launch(args);
-    }
-
-    public Properties getSettings() throws IOException {
-        Properties prop = new Properties();
-
-        try {
-            FileInputStream fstream = new FileInputStream("Settings.txt");
-            prop.load(fstream);
-        } catch (IOException e) {
-            System.out.println("No file, using defaults!");
-            prop.setProperty("INSTALLATION_FOLDER", "");
-            prop.setProperty("MAKE_BACKUP", "true");
-            prop.setProperty("INSTALL_DZN_CommonFunctions", "true");
-            prop.setProperty("INSTALL_DZN_GEAR", "true");
-            prop.setProperty("INSTALL_DZN_DYNAI", "true");
-            prop.setProperty("INSTALL_DZN_CIVEN", "false");
-            prop.setProperty("INSTALL_DZN_TSF", "true");
-            prop.setProperty("KIT_1", "");
-            prop.setProperty("KIT_2", "");
-            prop.setProperty("KIT_3", "");
-            prop.setProperty("REPO_DZN_CommonFunctions", "");
-            prop.setProperty("REPO_DZN_GEAR", "");
-            prop.setProperty("REPO_DZN_DYNAI", "");
-            prop.setProperty("REPO_DZN_CIVEN", "");
-            prop.setProperty("REPO_DZN_TSF", "");
-        }
-
-        return prop;
     }
 
     static Map<String, CheckBox> InstallNeeded;
