@@ -92,7 +92,7 @@ public class Installer {
 
     public static void LogToFile(String line) throws IOException {
         System.out.println(line);
-        Files.write(log.toPath(), "\n\r".concat(line).getBytes(), StandardOpenOption.APPEND );
+        Files.write(log.toPath(), "\n".concat(line).getBytes(), StandardOpenOption.APPEND );
     }
 
     public static void ProcessRepository(String name, boolean isNeeded, String url) throws IOException {
