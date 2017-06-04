@@ -26,7 +26,7 @@ public class KitAsset {
 			TextField tf = new TextField(urls[i]);
 			tf.setPromptText("URL to zip-archive");
 			fields[i] = tf;
-			labels[i] = new Label("Kit_".concat(Integer.toString(i)));
+			labels[i] = new Label("Kit #".concat(Integer.toString(i + 1)));
 		}
 	}
 

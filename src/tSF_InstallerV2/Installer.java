@@ -154,11 +154,9 @@ public class Installer {
 	private void ProcessRepository(InstallAsset asset) throws IOException {
 		if (!asset.isNeeded()) { return; }
 		LogToFile( "Installing ".concat(asset.getTitle()) );
-
 		String url = asset.getUrl().isEmpty() ? Repositories.get(asset.getTitle()) : asset.getUrl();
 		LogToFile("    Downloading... ".concat(url));
 		File folder = new File( DownloadRepository(url,false) );
-		LogToFile("     Done!");
 		CopyFolder(folder, new File("Temp"));
 		DeleteFolder(folder);
 		DeleteFolder(new File (GetRepoFileName(url)));
