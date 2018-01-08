@@ -57,8 +57,14 @@ public class Main extends Application {
             @Override
             public void handle(ActionEvent event) {
                 DirectoryChooser directoryChooser = new DirectoryChooser();
-                if ( !installer.path.isEmpty() ) {
-                    directoryChooser.setInitialDirectory(new File( installer.path ));
+
+                File installDir = new File(installer.path);
+                while (!installDir.exists()) {
+                    installDir = installDir.getParentFile();
+                }
+
+                if (!installer.path.isEmpty() && installDir.exists()) {
+                    directoryChooser.setInitialDirectory(installDir);
                 }
 
                 File selectedDirectory = directoryChooser.showDialog(primaryStage);
