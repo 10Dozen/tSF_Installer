@@ -1,4 +1,4 @@
-# tSF_Installer v2.1
+# tSF_Installer v2.2
 Tactical Shift Framework installer
 
 ### Getting Started
