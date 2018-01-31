@@ -30,7 +30,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws IOException {
         Installer installer = new Installer();
 
-        primaryStage.setTitle("tSF Installer (v2.1)");
+        primaryStage.setTitle("tSF Installer (v2.2)");
         primaryStage.getIcons().add(new Image("icon.jpg"));
 
         GridPane grid = new GridPane();
@@ -58,13 +58,19 @@ public class Main extends Application {
             public void handle(ActionEvent event) {
                 DirectoryChooser directoryChooser = new DirectoryChooser();
 
-                File installDir = new File(installer.path);
-                while (!installDir.exists()) {
-                    installDir = installDir.getParentFile();
-                }
+                System.out.println(installer.path);
+                if (installer.path.isEmpty()) { System.out.println("No installation folder"); };
 
-                if (!installer.path.isEmpty() && installDir.exists()) {
-                    directoryChooser.setInitialDirectory(installDir);
+                File installDir;
+                if (!installer.path.isEmpty()) {
+                    installDir = new File(installer.path);
+                    while (!installDir.exists()) {
+                        installDir = installDir.getParentFile();
+                    }
+
+                    if (!installer.path.isEmpty() && installDir.exists()) {
+                        directoryChooser.setInitialDirectory(installDir);
+                    }
                 }
 
                 File selectedDirectory = directoryChooser.showDialog(primaryStage);

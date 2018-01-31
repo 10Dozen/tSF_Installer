@@ -275,7 +275,9 @@ public class Installer {
 		List<String> lines = new ArrayList<>();
 		lines.add("//	Tacitcal Shift Framework initialization");
 		lines.add("[] spawn {");
-		lines.add("        waitUntil { !isNil \"MissionDate\" };");
+		if (this.tsf.isNeeded()) {
+			lines.add("        waitUntil { !isNil \"MissionDate\" };");
+		}
 
 		if (this.gear.isNeeded()) {
 			lines.add("");
