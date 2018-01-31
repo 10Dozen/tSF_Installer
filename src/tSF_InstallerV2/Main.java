@@ -30,7 +30,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws IOException {
         Installer installer = new Installer();
 
-        primaryStage.setTitle("tSF Installer (v2.2)");
+        primaryStage.setTitle("tSF Installer (v2.2.1)");
         primaryStage.getIcons().add(new Image("icon.jpg"));
 
         GridPane grid = new GridPane();
