@@ -277,11 +277,12 @@ public class Installer {
 		lines.add("[] spawn {");
 		if (this.tsf.isNeeded()) {
 			lines.add("        waitUntil { !isNil \"MissionDate\" };");
+			lines.add("        if (!isServer && getClientStateNumber < 10) then { setDate MissionDate; };");
 		}
 
 		if (this.gear.isNeeded()) {
 			lines.add("");
-			lines.add("        // dzn Gear 	(set true to engage Edit mode)");
+			lines.add("        // dzn Gear (set true to engage Edit mode)");
 			lines.add("        [false] execVM \"dzn_gear\\dzn_gear_init.sqf\";");
 		}
 
