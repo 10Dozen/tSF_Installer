@@ -154,7 +154,7 @@ func init() {
 	installCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.tSFInstaller.yaml)")
 
 	installCmd.PersistentFlags().String("dir", "", "output directory (where to install, required)")
-	installCmd.PersistentFlags().StringP(DZN_COMMON_FUNCTIONS, "c", "", "repo path to dzn_commonFunctions")
+	installCmd.PersistentFlags().StringP(DZN_COMMON_FUNCTIONS, "c", "", "repo path to dzn_commonFunctions (browser url, e.g. https://github.com/10Dozen/dzn_commonFunctions/tree/v1.8)")
 	installCmd.PersistentFlags().StringP(DZN_GEAR, "g", "", "repo path to dzn_gear")
 	installCmd.PersistentFlags().StringP(DZN_DYNAI, "d", "", "repo path to dzn_dynai")
 	installCmd.PersistentFlags().StringP(DZN_TSFRAMEWORK, "f", "", "repo path to dzn_tSFramework")
@@ -162,6 +162,10 @@ func init() {
 
 	viper.BindPFlag("dir", installCmd.PersistentFlags().Lookup("dir"))
 	viper.BindPFlag("override", installCmd.PersistentFlags().Lookup("nobackup"))
+	viper.BindPFlag(DZN_COMMON_FUNCTIONS, installCmd.PersistentFlags().Lookup(DZN_COMMON_FUNCTIONS))
+	viper.BindPFlag(DZN_GEAR, installCmd.PersistentFlags().Lookup(DZN_GEAR))
+	viper.BindPFlag(DZN_DYNAI, installCmd.PersistentFlags().Lookup(DZN_DYNAI))
+	viper.BindPFlag(DZN_TSFRAMEWORK, installCmd.PersistentFlags().Lookup(DZN_TSFRAMEWORK))
 	installCmd.MarkPersistentFlagRequired("dir")
 
 	rootCmd.AddCommand(installCmd)

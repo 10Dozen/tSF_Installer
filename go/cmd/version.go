@@ -11,7 +11,7 @@ import (
 )
 
 // versionCmd represents the version command
-var version = [4]int{1, 0, 0}
+var version = [4]int{1, 0, 1}
 var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "App version",
