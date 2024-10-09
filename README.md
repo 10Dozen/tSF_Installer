@@ -1,8 +1,8 @@
-# tSF_Installer v2.2.2 (Java) / v1.0.0 (Go)
+# tSF_Installer v2.2.2 (Java) / v1.0.1 (Go)
 Tactical Shift Framework installer
 
 ### Как пользоваться (CLI версия)
-- [Скачать .EXE](https://raw.githubusercontent.com/10Dozen/tSF_Installer/refs/heads/master/tSF_Installer_v1.0.0.zip) 
+- [Скачать .EXE](https://github.com/10Dozen/tSF_Installer/raw/refs/heads/master/tSF_Installer_v1.0.1.zip) 
 - Распаковать и положить в любое удобное место
 - Запустить `cmd` / `PowerShell` и перейти в директорию куда положили .exe файл (альтернативно - запустить `run_cmd.bat`)
 - В окне консоли выполнить:
