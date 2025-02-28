@@ -13,7 +13,7 @@ tSFInstaller.exe install -h
 # Установить в директорию path\to\mission\folder
 tSFInstaller.exe install --dir="path\to\mission\folder"
 
-# Установить компонент не из основной ветки (c - commonFunctions)
+# Установить компонент не из основной ветки (c - commonFunctions, g - dzn_gear, d - dnz_dynai, t - tSFramework)
 tSFInstaller.exe install --dir="path\to\mission\folder" -c="https://github.com/10Dozen/dzn_commonFunctions/tree/v1.8"
 ```
 
