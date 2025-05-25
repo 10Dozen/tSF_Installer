@@ -1,0 +1,50 @@
+{{define "diff"}}
+
+{{if .BlockUI}}
+<div class="sticky-top" style="background-color: white">
+    <h3 class="display-6">[{{ .Position }}] {{ .File }}</h3>
+    <br/>
+    <div class="card" hx-trigger="every 1s" hx-get="/diff/{{.Idx}}" hx-target="#main">
+        <div class="card-body">
+            <div class="card-text">Открыто в VSCode. Внесите изменения в файл в правой вкладке, сохраните и закройте
+                вкладку VSCode для продолжения.</div>
+        </div>
+    </div>
+</div>
+
+{{else}}
+
+<div class="d-grid gap-2 col-12 mb-4 mx-auto" hx-target="#main">
+    <button id="diff-skip-btn" class="btn btn-secondary" hx-post="/diff/skipAll"
+        title="Оставит старые версии файлов с суфиксом .backup и установит новые файлы" {{if .BlockUI}} disabled
+        {{end}}>Пропустить все</button>
+</div>
+
+<div class="sticky-top" style="background-color: white">
+    <h3 class="display-6">[{{ .Position }}] {{ .File }}</h3>
+    <div class="d-grid gap-2 col-12 mb-4 mx-auto" hx-target="#main">
+        <div class="btn-group" role="group" style="margin-bottom: 5px">
+            <button id="diff-bckp-btn" class="btn btn-success" hx-patch="/diff/{{.Idx}}/backup"
+                title="Старый файл сохраняется с суффиксом .backup.">Сохранить оба</button>
+            <button id="diff-old-btn" class="btn btn-primary" hx-patch="/diff/{{.Idx}}/old">Оставить старый</button>
+            <button id="diff-new-btn" class="btn btn-warning " hx-patch="/diff/{{.Idx}}/new">Заменить на новый</button>
+            {{if .HasVSC}}
+            <button id="diff-new-btn" class="btn btn-secondary" hx-patch="/diff/{{.Idx}}/vsc" 
+             title="Открывает старый и новые файлы в Visual Studio Code в режиме сверки. 
+             Новый файл (справа) будет установлен в вашу миссию">Открыть в VSCode</button>
+            {{end}}
+        </div>
+    </div>
+</div>
+{{end}}
+
+
+<div class="card">
+    <div class="card-body font-monospace tSF-DiffCard">
+        {{ .DiffContent }}
+    </div>
+</div>
+
+<br>
+
+{{end}}

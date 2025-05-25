@@ -1,0 +1,45 @@
+{{define "options"}}
+
+<!-- Install form -->
+<div class="col-md-9 offset-md-1" hx-target="#main" hx-on::before-request="document.getElementById('install-btn').disabled = true;">
+    <form>
+        <div class="input-group mb-3 ">
+            <div class="form-floating {{ if .PathError }} is-invalid {{- end }}">
+                <input type="text" class="form-control {{ if .PathError }} is-invalid {{ else if .PathValue }} is-valid {{ end }}" name="pathInput" id="pathInput"
+                    hx-post="/validate" 
+                    value="{{ .PathValue }}"
+                    required>
+                <label for="pathInput">Путь до директории миссии</label>
+            </div>
+            <div class="invalid-feedback">{{ .PathError }}</div>
+        </div>
+        
+        <h5>Компоненты</h5>
+        <div>
+            <small>Выберите компоненты для установки. Опционально можно указать ссылку на GitHub ветку репозитория из которой хотите получить компонент.</small>
+        </div>
+        {{range .Components}}
+            {{ template "option" . }}
+        {{end}}
+
+        <h5>Опции</h5>
+        <div class="mb-3">                    
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" name="makeBackup" id="makeBackup" 
+                {{ if .BackupEnabled }} checked {{ end }}
+                style="cursor: pointer;">
+                <label class="form-check-label" for="makeBackup" style="cursor: pointer;">Сохранить настройки</label>
+            </div>
+            <small>Сохраняет существующие файлы настроек после обновления.</small>
+        </div>
+        
+        <hr>
+        <div class="d-grid gap-2 col-12 mb-4 mx-auto">
+            <button id="install-btn"  class="btn btn-primary" {{ if not .Verified }} disabled {{ end }}
+                    hx-post="/install" hx-target="#main">Установить</button>
+        </div>
+    </form>
+</div>
+
+
+{{end}}

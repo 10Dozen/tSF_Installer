@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <script src="/static/htmx.min.js"></script>
+        <script src="/static/bootstrap.bundle.min.js"></script>
+        <script src="/static/tsf_installer.js"></script>
+        <link href="/static/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+        <link href="/static/styles.css" rel="stylesheet" crossorigin="anonymous">
+ 
+        <title>tSF Installer v2.0</title>
+    </head>
+    <body>
+        <div class="container mt-3">
+            <h3 class="display-6">tSF Installation Kit (v2.0)</h3>
+        </div>
+        
+        <div id="main" class="container mt-3">
+            {{ template "options" . }}
+        </div>
+    </body>
+</html>

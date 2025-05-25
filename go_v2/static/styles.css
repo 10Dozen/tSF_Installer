@@ -1,0 +1,35 @@
+.tSF-Rounded {
+    border-radius: 10px;
+    padding: 5px!important;
+}
+
+.tSF-Remove {
+    background-color:rgba(211, 105, 105, 0.33);
+    padding: 2px;
+}
+
+.tSF-MoveFrom {
+    background-color:#6d696926;
+    padding: 2px;
+}
+
+.tSF-MoveTo {
+    background-color:#e2ebff;
+    padding: 2px;
+}
+
+.tSF-DiffCard {
+    background-color: lightgray;
+    white-space:pre;
+    text-wrap: auto;
+}
+
+ins {
+    color: #3d3d3d;
+    text-decoration: none;
+}
+del {
+    color: #3d3d3d;
+    background-color: #ffa2a2!important;
+    text-decoration: none;
+}
