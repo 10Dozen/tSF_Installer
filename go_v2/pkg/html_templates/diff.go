@@ -1,5 +1,6 @@
-{{define "diff"}}
+package html_templates
 
+const DIFF = `
 {{if .BlockUI}}
 <div class="sticky-top" style="background-color: white">
     <h3 class="display-6">[{{ .Position }}] {{ .File }}</h3>
@@ -46,5 +47,4 @@
 </div>
 
 <br>
-
-{{end}}
+`

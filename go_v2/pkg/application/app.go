@@ -35,9 +35,11 @@ func NewApplication() *Application {
 }
 
 func (a *Application) Reset() {
-	//fmt.Println("[APP] Reset")
-	//a.State = "NEW"
-	//a.Logs = []LogMessage{}
+	fmt.Println("[APP] Reset")
+	a.State = APP_STATE_NEW
+	a.TargetDir = ""
+	a.Diffs = []*Diff{}
+	a.Logs = []*LogMessage{}
 }
 
 func (a *Application) Log(level string, msg string, args ...any) {
@@ -53,6 +55,8 @@ func (a *Application) StartInstallation(targetDir string, components []InstallOp
 	// Then copies actual framework into the 'dir'
 
 	a.TargetDir = targetDir
+
+	zipDirectory(targetDir)
 
 	a.Log(LOG_TAG_INFO, "Установка началась")
 	a.State = APP_STATE_INSTALL

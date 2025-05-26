@@ -1,11 +1,12 @@
-{{define "done"}}
+package html_templates
 
+const DONE = `
 <div class="alert alert-success" role="alert">
     <h4 class="alert-heading">Восхитительный успех!</h4>
     <p>О да, Вы успешно установили все нобходимые скрипты для создания миссии. Успехов в вашем творчестве!</p>
     <hr>
     <p><b>Директория миссии:</b></p>
-    <div class="card" onClick="navigator.clipboard.writeText(document.getElementById(`toCopy`).textContent);" style="cursor: pointer">
+    <div class="card" onClick="navigator.clipboard.writeText(document.getElementById('toCopy').textContent);" style="cursor: pointer">
         <div class="card-body">
             <div id="toCopy" class="card-text font-monospace">{{ . }}</div>
         </div>
@@ -20,6 +21,4 @@
         <li><a href="https://tacticalshift.ru/docs/MMO/editor_misc.html">Ревью и поддержка миссии</a></li>
     </ul>
 </div>
-
-
-{{end}}
+`

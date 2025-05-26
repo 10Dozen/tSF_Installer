@@ -11,7 +11,7 @@ func GetRootPageHandler(app *application.Application, tmpl *template.Template) h
 	return func(w http.ResponseWriter, r *http.Request) {
 		app.Reset()
 
-		err := tmpl.ExecuteTemplate(w, "home.html", GetDefaultOptions())
+		err := tmpl.ExecuteTemplate(w, "root", GetDefaultOptions())
 		if err != nil {
 			http.Error(w, "Error exeucting template: "+err.Error(), http.StatusInternalServerError)
 		}

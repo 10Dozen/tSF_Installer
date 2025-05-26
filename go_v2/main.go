@@ -9,6 +9,7 @@ import (
 
 	"tSF_Installer/pkg/application"
 	"tSF_Installer/pkg/handlers"
+	"tSF_Installer/pkg/html_templates"
 
 	"github.com/gorilla/mux"
 )
@@ -39,7 +40,14 @@ var (
 )
 
 func init() {
-	tmpl = template.Must(template.ParseGlob("templates/*html"))
+	tmpl = template.Must(template.New("install_component_option").Parse(html_templates.INSTALL_COMPONENT_OPTION))
+	tmpl = template.Must(tmpl.New("installation").Parse(html_templates.INSTALLATION))
+	tmpl = template.Must(tmpl.New("root").Parse(html_templates.ROOT))
+	tmpl = template.Must(tmpl.New("done").Parse(html_templates.DONE))
+	tmpl = template.Must(tmpl.New("diff").Parse(html_templates.DIFF))
+	tmpl = template.Must(tmpl.New("progress").Parse(html_templates.PROGRESS))
+
+	// tmpl = template.Must(template.ParseGlob("templates/*html"))
 	app = application.NewApplication()
 }
 

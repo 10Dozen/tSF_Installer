@@ -20,11 +20,11 @@ func GetValidationHandler(app *application.Application, tmpl *template.Template)
 
 		if !state.Verified {
 			w.WriteHeader(http.StatusUnprocessableEntity)
-			tmpl.ExecuteTemplate(w, "options", state)
+			tmpl.ExecuteTemplate(w, "installation", state)
 			return
 		}
 
-		tmpl.ExecuteTemplate(w, "options", state)
+		tmpl.ExecuteTemplate(w, "installation", state)
 	}
 }
 
@@ -37,7 +37,7 @@ func GetInstallHandler(app *application.Application, tmpl *template.Template) ht
 		// -- Final validation
 		if !state.Verified {
 			w.WriteHeader(http.StatusUnprocessableEntity)
-			tmpl.ExecuteTemplate(w, "options", state)
+			tmpl.ExecuteTemplate(w, "installation", state)
 			return
 		}
 

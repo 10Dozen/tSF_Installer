@@ -1,3 +1,6 @@
+package html_templates
+
+const ROOT = `
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -17,7 +20,9 @@
         </div>
         
         <div id="main" class="container mt-3">
-            {{ template "options" . }}
+            {{ template "installation" . }}
         </div>
     </body>
 </html>
+
+`

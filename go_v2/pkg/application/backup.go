@@ -45,7 +45,7 @@ var backupStrategy = map[string]BackupStrategy{
 		},
 	},
 	SLUG_DYNAI: {
-		dir:    []string{SLUG_CONFIG, SLUG_DYNAI},
+		dir:    []string{SLUG_CONFIG, SLUG_CONFIG_DYNAI},
 		always: nil,
 		onDiff: []string{
 			"Settings.sqf",
@@ -59,19 +59,6 @@ var backupStrategy = map[string]BackupStrategy{
 		onDiff: []string{"*"},
 	},
 }
-
-/* -- For each strategy - run worker
-
-	   -- Compose diff info as slice:
-	   		{
-	   			pathnameCurrent string,  ((missionRoot ommited)/Config/file.sqf)
-				pathnameNew string,      ((missionRoot ommited)/Config/file.sqf)
-				diffHtml string,
-			}
-
-       -- On UI render page as /diff/{index}
-	      Get from slice by index and render
-*/
 
 func (a *Application) BackupCustomFiles(rootDir, tempDir string) {
 	// -- Rename settings files and move to Config

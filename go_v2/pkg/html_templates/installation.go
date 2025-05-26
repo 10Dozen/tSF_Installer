@@ -1,5 +1,6 @@
-{{define "options"}}
+package html_templates
 
+const INSTALLATION = `
 <!-- Install form -->
 <div class="col-md-9 offset-md-1" hx-target="#main" hx-on::before-request="document.getElementById('install-btn').disabled = true;">
     <form>
@@ -19,7 +20,7 @@
             <small>Выберите компоненты для установки. Опционально можно указать ссылку на GitHub ветку репозитория из которой хотите получить компонент.</small>
         </div>
         {{range .Components}}
-            {{ template "option" . }}
+            {{ template "install_component_option" . }}
         {{end}}
 
         <h5>Опции</h5>
@@ -40,6 +41,33 @@
         </div>
     </form>
 </div>
+`
 
-
-{{end}}
+const INSTALL_COMPONENT_OPTION = `
+<div class="mb-1">
+    <div class="form-check form-switch col-form-label-lg pt-2 pb-0">
+        <input class="form-check-input " type="checkbox" role="switch" style="cursor: pointer;" 
+                name="{{ .Slug }}CB" id="{{.Slug}}" 
+                {{ if .Checked }} checked {{ end }}
+                {{ if not .Enabled }} disabled {{ end }}
+                hx-post="/validate"
+        >
+        <label class="form-check-label" for="{{ .Slug }}" style="cursor: pointer;">{{ .Label }}</label>
+    </div>
+    <small>{{ .Description }}</small>
+    {{ if .Checked }}
+    <div class="input-group mb-1 {{ if .Error }} is-invalid {{ else }} is-valid {{- end }}">
+        <div class="form-floating">
+            <input type="text" class="form-control {{ if .Error }} is-invalid {{ else }} is-valid {{- end }}" 
+                name="{{ .Slug }}URLInput" id="{{ .Slug }}URLInput" 
+                value="{{ .Value }}"
+                required
+                hx-post="/validate"
+                >
+            <label for="{{ .Slug }}URLInput">Репозиторий</label>
+            <div class="invalid-feedback">{{ .Error }}</div>
+        </div>
+    </div>
+    {{end}}
+</div>
+`

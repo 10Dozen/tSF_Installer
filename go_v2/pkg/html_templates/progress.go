@@ -1,5 +1,6 @@
-{{define "progress"}}
+package html_templates
 
+const PROGRESS = `
 <!-- Progress form -->
 <div class="col-md-9 offset-md-1">
   <div class="d-flex justify-content-center" hx-trigger="every 1s" hx-get="/status" hx-target="#main">
@@ -14,4 +15,4 @@
     {{end}}
   </ul>
 </div>
-{{end}}
+`

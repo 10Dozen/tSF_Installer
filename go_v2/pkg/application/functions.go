@@ -50,7 +50,6 @@ func getDownloadUrl(name, url string) string {
 	//   string URL to selected repository/branch archive file
 	fqUrl := completeUrl(url)
 
-	// TBD: Uncomment
 	//if fqUrl == completeUrl(DefaultOptions[name].Value) {
 	//	fqUrl += fmt.Sprintf(GITHUB_DOWNLOAD_SUFFIX, GITHUB_DEFAULT_BRANCH)
 	//	return fqUrl
@@ -125,6 +124,63 @@ func unzipFile(source, dest string) error {
 		create.ReadFrom(open)
 	}
 	return nil
+}
+
+func zipDirectory(sourceDir string) error {
+	zipFileName := filepath.Base(sourceDir) + ".BACKUP.zip"
+	zipFilePath := filepath.Join(sourceDir, zipFileName)
+
+	zipFile, err := os.Create(zipFilePath)
+	if err != nil {
+		return err
+	}
+	defer zipFile.Close()
+
+	zipWriter := zip.NewWriter(zipFile)
+	defer zipWriter.Close()
+
+	// Обходим все файлы и поддиректории
+	err = filepath.Walk(sourceDir, func(filePath string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		// Пропускаем сам созданный zip-файл
+		if filePath == zipFilePath {
+			return nil
+		}
+
+		// Получаем относительный путь файла от корневой директории
+		relPath, err := filepath.Rel(sourceDir, filePath)
+		if err != nil {
+			return err
+		}
+
+		// Если это директория, создаём её в архиве
+		if info.IsDir() {
+			_, err := zipWriter.Create(relPath + "/")
+			return err
+		}
+
+		// Открываем файл для добавления в архив
+		fileToZip, err := os.Open(filePath)
+		if err != nil {
+			return err
+		}
+		defer fileToZip.Close()
+
+		// Создаём файл в архиве
+		zipFileEntry, err := zipWriter.Create(relPath)
+		if err != nil {
+			return err
+		}
+
+		// Копируем содержимое файла в архив
+		_, err = io.Copy(zipFileEntry, fileToZip)
+		return err
+	})
+
+	return err
 }
 
 func composeComponentAtTempDirectory(source, dest string) {
