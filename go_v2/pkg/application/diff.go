@@ -30,6 +30,7 @@ func (a *Application) ResolveAllDiffs() {
 		if resolution == "" {
 			resolution = DIFF_RESOLUTION_BACKUP
 		}
+		a.Log(LOG_TAG_INFO, "&nbsp;&nbsp;Разрешаем конфликт: <span class='tSF-MoveFrom'>%s</span> => %s", diff.OriginalFile, resolution)
 
 		fmt.Println("[ResolveAllDiffs] Diff=", diff.NewFile, "Resolution=", resolution)
 

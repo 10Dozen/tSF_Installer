@@ -5,7 +5,6 @@ import (
 	"html/template"
 	"net/http"
 	"strconv"
-	"strings"
 	"tSF_Installer/pkg/application"
 
 	"github.com/gorilla/mux"
@@ -33,7 +32,7 @@ func GetDiffHandler(app *application.Application, tmpl *template.Template) http.
 		nextDiff := NextUnresolvedDiffInfo(app)
 		if nextDiff == nil {
 			app.FinishInstallation()
-			tmpl.ExecuteTemplate(w, "done", template.HTML(app.TargetDir))
+			tmpl.ExecuteTemplate(w, "done", NewDoneHandlerData(app))
 			return
 		}
 
@@ -65,7 +64,7 @@ func GetDiffResolveHandler(app *application.Application, tmpl *template.Template
 		nextDiff := NextUnresolvedDiffInfo(app)
 		if nextDiff == nil {
 			app.FinishInstallation()
-			tmpl.ExecuteTemplate(w, "done", template.HTML(app.TargetDir))
+			tmpl.ExecuteTemplate(w, "done", NewDoneHandlerData(app))
 			return
 		}
 
@@ -77,33 +76,6 @@ func GetDiffSkipAllHandler(app *application.Application, tmpl *template.Template
 	return func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("[DiffSkipAllHandler] Skipped!")
 		app.FinishInstallation()
-		tmpl.ExecuteTemplate(w, "done", template.HTML(app.TargetDir))
+		tmpl.ExecuteTemplate(w, "done", NewDoneHandlerData(app))
 	}
-}
-
-func NextUnresolvedDiffInfo(app *application.Application) *DiffInfo {
-	var nextDiffIdx int
-	var nextDiff *application.Diff
-	for idx, diff := range app.Diffs {
-		if diff.Resolution == "" {
-			nextDiffIdx = idx
-			nextDiff = diff
-			break
-		}
-	}
-
-	if nextDiff == nil {
-		return nil
-	}
-
-	info := DiffInfo{
-		Idx:         nextDiffIdx,
-		Position:    fmt.Sprintf("%d/%d", nextDiffIdx+1, len(app.Diffs)),
-		File:        strings.Replace(nextDiff.OriginalFile, app.TargetDir, "", -1),
-		DiffContent: template.HTML(nextDiff.Diff),
-		HasVSC:      app.HasVSC,
-		BlockUI:     app.State != application.APP_STATE_DIFF,
-	}
-
-	return &info
 }

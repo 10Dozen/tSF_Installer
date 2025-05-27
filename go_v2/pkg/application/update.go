@@ -101,37 +101,35 @@ func (a *Application) UpdateOriginalMission(rootDir string) {
 	// -- Exit if Config already exists in root
 	exists := PathExists(dirs[0])
 	a.Log(LOG_TAG_INFO, "&nbsp;&nbsp;Конфиги уже откреплены")
-	if exists {
-		return
-	}
-
-	// -- Create Config dir
-	a.Log(LOG_TAG_INFO, "&nbsp;&nbsp;Создаем директорию для открепленных конфигов")
-	for _, dirToCreate := range dirs {
-		if err := os.Mkdir(dirToCreate, os.ModePerm); err != nil {
-			log.Fatal(err)
+	if !exists {
+		// -- Create Config dir
+		a.Log(LOG_TAG_INFO, "&nbsp;&nbsp;Создаем директорию для открепленных конфигов")
+		for _, dirToCreate := range dirs {
+			if err := os.Mkdir(dirToCreate, os.ModePerm); err != nil {
+				log.Fatal(err)
+			}
 		}
-	}
 
-	// -- Rename settings files and move to Config
-	a.Log(LOG_TAG_INFO, "&nbsp;&nbsp;Открепляем конфиги миссии")
-	const numWorkers = 4
-	numJobs := len(UpdateStrategies)
-	jobs := make(chan UpdateStrategy, numJobs)
-	results := make(chan int, numJobs)
+		// -- Rename settings files and move to Config
+		a.Log(LOG_TAG_INFO, "&nbsp;&nbsp;Открепляем конфиги миссии")
+		const numWorkers = 4
+		numJobs := len(UpdateStrategies)
+		jobs := make(chan UpdateStrategy, numJobs)
+		results := make(chan int, numJobs)
 
-	for w := 1; w <= numWorkers; w++ {
-		go updateWorker(a, rootDir, dirs[0], jobs, results)
-	}
-	for _, strategy := range UpdateStrategies {
-		jobs <- strategy
-	}
-	close(jobs)
+		for w := 1; w <= numWorkers; w++ {
+			go updateWorker(a, rootDir, dirs[0], jobs, results)
+		}
+		for _, strategy := range UpdateStrategies {
+			jobs <- strategy
+		}
+		close(jobs)
 
-	for a := 1; a <= numJobs; a++ {
-		<-results
+		for a := 1; a <= numJobs; a++ {
+			<-results
+		}
+		close(results)
 	}
-	close(results)
 
 	// -- Delete old component versions
 	a.Log(LOG_TAG_INFO, "&nbsp;&nbsp;Удаляем старые версии компонентов:")
@@ -146,7 +144,7 @@ func (a *Application) UpdateOriginalMission(rootDir string) {
 		os.RemoveAll(dirToRemove)
 	}
 
-	a.Log(LOG_TAG_INFO, "Целевая директория успешно обновлена")
+	a.Log(LOG_TAG_INFO, "Целевая директория подготовлена")
 }
 
 func updateWorker(a *Application, rootDir, targetDir string, jobs <-chan UpdateStrategy, results chan<- int) {

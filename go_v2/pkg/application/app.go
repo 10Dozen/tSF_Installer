@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"time"
 )
 
 type Application struct {
@@ -43,7 +44,7 @@ func (a *Application) Reset() {
 }
 
 func (a *Application) Log(level string, msg string, args ...any) {
-	message := fmt.Sprintf(msg, args...)
+	message := fmt.Sprintf("%s %s", time.Now().Format("15:04:05"), fmt.Sprintf(msg, args...))
 	fmt.Println("[APP] LOG:", message)
 
 	a.LogsCh <- LogMessage{message, level}
@@ -89,7 +90,6 @@ func (a *Application) StartInstallation(targetDir string, components []InstallOp
 	}
 
 	// -- Copy tmp folder to main
-	a.Log(LOG_TAG_INFO, "Копируем новые файлы в директорию миисии!")
 	a.FinishInstallation()
 
 	a.State = APP_STATE_DONE
@@ -98,7 +98,7 @@ func (a *Application) StartInstallation(targetDir string, components []InstallOp
 func (a *Application) FinishInstallation() {
 	a.ResolveAllDiffs()
 
-	fmt.Println("[MERGE] Copy dir")
+	a.Log(LOG_TAG_INFO, "Копируем новые файлы в директорию миисии!")
 	err := copyDir(TEMP_DIR, a.TargetDir)
 	if err != nil {
 		panic(err)
